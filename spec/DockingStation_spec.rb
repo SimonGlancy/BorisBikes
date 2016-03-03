@@ -1,22 +1,25 @@
 require 'dockingstation'
 
-describe DockingStation do 
+describe DockingStation do
 	it {expect(subject).to respond_to :release_bike }
 
+	let(:bike) {double :bike}
 	it "checks whether release_bike gets a bike" do
 		station = DockingStation.new
-		station.dock_bike(Bike.new)
-	expect(station.release_bike).to be_a(Bike)
+		allow(bike).to receive(:working?).and_return(true)
+		station.dock_bike(bike)
+	expect(station.release_bike).to eq(bike)
 	end
 
 	it 'expects bikes to be working' do
-		expect(Bike.new.working?).to eq (false or true)
+		allow(bike).to receive(:working?).and_return(true)
+		expect(bike.working?).to eq (true)
 	end
-	
+
 	it {expect(subject).to respond_to(:dock_bike).with(1).argument }
 
 	it 'expect to see a bike' do
-		 
+
 		expect(subject.bikes).to be_a(Array)
 	end
 
@@ -28,42 +31,41 @@ describe DockingStation do
 
 	it 'expects error when no bikes' do
 			expect {
-				while true 
+				while true
 				subject.release_bike
-			    end}.to raise_error(RuntimeError)
+			  end
+				}.to raise_error(RuntimeError)
 	end
 
 	describe "#dock_bike" do
+
 		it 'expects error when dock is full' do
-			
-			
 			expect {
 				while true
-				subject.dock_bike(Bike.new)
+				subject.dock_bike(bike)
 				end
 				}.to raise_error(RuntimeError)
 		end
 
+  it 'accepts a specific capacity' do
 
-	it 'expects error when no trying to release a broken bike' do
-			expect {
-				dock = DockingStation.new
-				broken_bike = dock.release_bike.broken
-				dock.dock_bike(broken_bike)
-				dock.release_bike
-			    }.to raise_error(RuntimeError)
+		expect(subject.capacity).to eq DockingStation::DEFAULT_CAPACITY
 	end
 
 
-	end	
-			
 
-	
+	it 'expects error when trying to release a broken bike' do
+		allow(bike).to receive(:broken).and_return(true)
+		allow(bike).to receive(:working?).and_return(false)
+		bike.broken
+		subject.dock_bike(bike)
+
+		expect {subject.release_bike}.to raise_error(RuntimeError)
+	end
+
+
+	end
+
+
+
 end
-
-
-
-
-
-
-

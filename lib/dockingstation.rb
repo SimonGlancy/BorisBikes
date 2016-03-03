@@ -2,16 +2,17 @@ require_relative 'bike'
 
 class DockingStation
 DEFAULT_CAPACITY = 20
-	
-	attr_reader :bikes
+
+	attr_reader :bikes, :capacity
 
 	def initialize(capacity=DEFAULT_CAPACITY)
-		@capacity = capacity 
+		@capacity = capacity
 		@bikes = [] #Array.new(20) {Bike.new}
 	end
 
 	def release_bike
 		raise ("No bikes left, try again later") if empty?
+		raise ("sorry this bike is broken") if @bikes.last.working? == false
 		bike = @bikes.pop
 
 	end
