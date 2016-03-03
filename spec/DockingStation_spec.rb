@@ -60,7 +60,7 @@ describe DockingStation do
 		bike.broken
 		subject.dock_bike(bike)
 
-		expect {subject.release_bike}.to raise_error(RuntimeError)
+		expect {subject.release_bike}.to raise_error(RuntimeError, "sorry this bike is broken")
 	end
 
 

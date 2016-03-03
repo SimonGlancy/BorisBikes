@@ -8,12 +8,14 @@ DEFAULT_CAPACITY = 20
 	def initialize(capacity=DEFAULT_CAPACITY)
 		@capacity = capacity
 		@bikes = [] #Array.new(20) {Bike.new}
+
 	end
 
 	def release_bike
 		raise ("No bikes left, try again later") if empty?
-		raise ("sorry this bike is broken") if @bikes.last.working? == false
-		bike = @bikes.pop
+		raise ("sorry this bike is broken") if working_bikes.length == 0 && broken_bikes.length > 0
+
+		@bikes.delete((@bikes.select {|bike| bike.working? == true}).first)
 
 	end
 
@@ -22,13 +24,24 @@ DEFAULT_CAPACITY = 20
 		@bikes << bike
 	end
 
+	def working_bikes
+	@bikes.select {|bike| bike.working? == true}
+	end
+
+	def broken_bikes
+	@bikes.select {|bike| bike.working? == false}
+	end
+
 	private
 
 	def full?
-		@bikes.length >= @capacity
+		@bikes.length > @capacity
 	end
 
 	def empty?
 		@bikes.length == 0
 	end
+
+
+
 end
