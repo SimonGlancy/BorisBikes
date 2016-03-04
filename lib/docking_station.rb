@@ -1,3 +1,5 @@
+require_relative 'bike'
+
 class DockingStation
 
   attr_reader :capacity
@@ -26,14 +28,22 @@ class DockingStation
     @bikes.last
   end
 
+  def broken_bikes
+    @bikes.select { |bike| !bike.working }
+  end
+
+  def remove_broken_bikes
+    @bikes.reject! { |bike| bike.working == false }
+  end
+
   private
   def full?
     bikes.length >= @capacity
   end
- 
+
   def empty?
    @bikes.empty?
   end
 
- 
+
 end

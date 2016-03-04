@@ -8,10 +8,12 @@ attr_reader :working
     @working = false
   end
 
+  def fix
+    @working = true
+  end 
 
 
-  
+
 
 
   end
-
